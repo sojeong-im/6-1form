@@ -227,11 +227,60 @@
         
     </div>
 
+    <!-- Firebase 연동 스크립트 -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
+
+        // 사용자 파이어베이스 프로젝트 설정
+        const firebaseConfig = {
+            apiKey: "AIzaSyAK7t4aZOR_zj6iIp_b5gjZHCLfzX0_hPk",
+            authDomain: "oneday-more.firebaseapp.com",
+            projectId: "oneday-more",
+            storageBucket: "oneday-more.firebasestorage.app",
+            messagingSenderId: "764964591140",
+            appId: "1:764964591140:web:0fd8b49e8bb490c1b8eab1",
+            measurementId: "G-RHZQ5V3KYF"
+        };
+
+        // Firebase 초기화
+        let app, db, analytics;
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            analytics = getAnalytics(app);
+        } catch (error) {
+            console.error("Firebase 초기화 에러 (설정값을 확인해주세요):", error);
+        }
+
+        // 전역으로 제출 함수 노출
+        window.submitToFirebase = async (data) => {
+            if (!db) {
+                alert("Firebase가 올바르게 설정되지 않았습니다.");
+                return false;
+            }
+            try {
+                const docRef = await addDoc(collection(db, "applications"), {
+                    ...data,
+                    submittedAt: new Date().toISOString()
+                });
+                console.log("Document written with ID: ", docRef.id);
+                return true;
+            } catch (e) {
+                console.error("Error adding document: ", e);
+                alert("제출 중 오류가 발생했습니다.");
+                return false;
+            }
+        };
+    </script>
+
     <script>
         function formApp() {
             return {
                 step: 1,
                 totalSteps: 5, 
+                isSubmitting: false,
                 q4Options: [
                     '시작하기까지 오래 걸리는 편',
                     '시작하면 제대로 하고 싶은 편',
@@ -266,6 +315,7 @@
                     });
                 },
                 canProceed() {
+                    if (this.isSubmitting) return false;
                     if (this.step === 1) {
                         return this.formData.name.trim() !== '' && 
                                this.formData.age.trim() !== '' && 
@@ -277,13 +327,25 @@
                     if (this.step === 5) return this.formData.q9.trim() !== '' && this.formData.q10.trim() !== '';
                     return true;
                 },
-                nextStep() {
+                async nextStep() {
                     if (this.canProceed() && this.step <= this.totalSteps) {
+                        if (this.step === this.totalSteps) {
+                            // 제출 단계
+                            this.isSubmitting = true;
+                            if (window.submitToFirebase) {
+                                const success = await window.submitToFirebase(this.formData);
+                                if (!success) {
+                                    this.isSubmitting = false;
+                                    return; // 실패시 다음 화면으로 넘어가지 않음
+                                }
+                            }
+                            this.isSubmitting = false;
+                        }
                         this.step++;
                     }
                 },
                 prevStep() {
-                    if (this.step > 1) {
+                    if (this.step > 1 && !this.isSubmitting) {
                         this.step--;
                     }
                 }

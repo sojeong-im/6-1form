@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 페이지 - 갓생 2기</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        body { font-family: 'Pretendard', sans-serif; background-color: #09090b; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #52525b; }
+    </style>
+</head>
+<body class="text-zinc-100 min-h-screen p-4 md:p-8 selection:bg-lime-400 selection:text-black">
+
+    <div x-data="adminApp()" class="max-w-6xl mx-auto mt-10">
+        
+        <!-- 1. 로그인 화면 -->
+        <div x-show="!isAuthenticated" class="max-w-md mx-auto bg-zinc-900 border border-zinc-800 p-8 rounded-2xl shadow-2xl mt-20">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-white">관리자 대시보드</h2>
+                <p class="text-zinc-400 mt-2 text-sm">비밀번호를 입력하여 접속하세요</p>
+            </div>
+            <div class="space-y-4">
+                <input type="password" x-model="password" @keydown.enter="login" placeholder="비밀번호" class="w-full p-4 bg-zinc-950 border border-zinc-700 rounded-xl focus:border-[#ccff00] focus:outline-none transition-colors text-white text-center font-mono text-lg tracking-widest">
+                <button @click="login" class="w-full p-4 bg-[#ccff00] text-black font-extrabold rounded-xl hover:brightness-110 transition-all">접속하기</button>
+                <p x-show="error" x-transition class="text-red-400 text-sm text-center" x-text="error"></p>
+            </div>
+        </div>
+
+        <!-- 2. 대시보드 화면 -->
+        <div x-show="isAuthenticated" style="display: none;" class="space-y-8">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b border-zinc-800 pb-6 gap-4">
+                <div>
+                    <span class="text-[#ccff00] font-bold text-sm tracking-wider uppercase">ADMIN DASHBOARD</span>
+                    <h1 class="text-3xl font-extrabold text-white mt-1">신청서 관리</h1>
+                    <p class="text-zinc-400 mt-2">현재 <span x-text="applications.length" class="text-white font-bold"></span>개의 신청서가 접수되었습니다.</p>
+                </div>
+                <button @click="fetchData" class="px-5 py-2.5 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-xl text-sm font-medium transition-colors flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                    새로고침
+                </button>
+            </div>
+
+            <!-- 로딩 표시 -->
+            <div x-show="isLoading" class="text-center py-20">
+                <svg class="animate-spin h-8 w-8 text-[#ccff00] mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <p class="text-zinc-500 mt-4 font-medium">데이터를 불러오는 중입니다...</p>
+            </div>
+
+            <!-- 데이터 없을 때 -->
+            <div x-show="!isLoading && applications.length === 0" class="text-center py-20 bg-zinc-900/50 rounded-3xl border border-zinc-800 border-dashed">
+                <p class="text-zinc-500 font-medium">아직 접수된 신청서가 없습니다.</p>
+            </div>
+
+            <!-- 카드 리스트 -->
+            <div x-show="!isLoading && applications.length > 0" class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+                <template x-for="app in applications" :key="app.id">
+                    <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl flex flex-col gap-4 hover:border-zinc-700 transition-colors shadow-lg">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-xl font-bold text-white flex items-center gap-2" x-text="app.name"></h3>
+                                <p class="text-zinc-400 text-sm mt-1" x-text="`${app.age} · ${app.school}`"></p>
+                            </div>
+                            <span class="text-xs text-zinc-500 bg-zinc-950 px-2 py-1 rounded-md" x-text="formatDate(app.submittedAt)"></span>
+                        </div>
+                        
+                        <div class="space-y-2 text-sm bg-zinc-950 p-4 rounded-xl border border-zinc-800/50">
+                            <p class="flex"><span class="text-zinc-500 w-16 flex-shrink-0">연락처</span> <span class="text-zinc-300 font-mono" x-text="app.contact"></span></p>
+                            <p class="flex"><span class="text-zinc-500 w-16 flex-shrink-0">주지역</span> <span class="text-zinc-300 truncate" x-text="app.location"></span></p>
+                        </div>
+
+                        <div class="space-y-3 text-sm mt-2 flex-grow">
+                            <div>
+                                <span class="text-[#ccff00] text-xs font-bold">Q. 관심사</span>
+                                <p class="text-zinc-300 mt-1 line-clamp-2" x-text="app.q1"></p>
+                            </div>
+                            <div>
+                                <span class="text-[#ccff00] text-xs font-bold">Q. 지원동기</span>
+                                <p class="text-zinc-300 mt-1 line-clamp-2" x-text="app.q10"></p>
+                            </div>
+                        </div>
+
+                        <button @click="selectedApp = app; isModalOpen = true" class="w-full py-2.5 mt-4 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl transition-colors text-sm font-bold flex justify-center items-center gap-2">
+                            상세 내용 보기
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </button>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- 3. 상세 모달 -->
+        <div x-show="isModalOpen" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+            <!-- 배경 오버레이 -->
+            <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" @click="isModalOpen = false"></div>
+            
+            <!-- 모달 컨텐츠 -->
+            <div class="bg-zinc-900 border border-zinc-700 rounded-3xl w-full max-w-3xl max-h-[90vh] overflow-hidden relative z-10 shadow-2xl flex flex-col transform transition-all">
+                
+                <div class="p-6 sm:p-8 border-b border-zinc-800 flex justify-between items-center bg-zinc-900 z-20">
+                    <div>
+                        <span class="text-[#ccff00] font-bold text-xs tracking-wider">APPLICATION DETAILS</span>
+                        <h2 class="text-2xl font-extrabold text-white mt-1" x-text="selectedApp?.name + '님의 신청서'"></h2>
+                    </div>
+                    <button @click="isModalOpen = false" class="text-zinc-500 hover:text-white bg-zinc-800 p-2 rounded-full transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+                
+                <div class="p-6 sm:p-8 overflow-y-auto space-y-8 text-sm" x-if="selectedApp">
+                    <!-- 기본 정보 -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 bg-zinc-950 p-6 rounded-2xl border border-zinc-800">
+                        <div><span class="block text-zinc-500 mb-1 text-xs font-bold">나이</span><span class="text-white text-base" x-text="selectedApp?.age"></span></div>
+                        <div><span class="block text-zinc-500 mb-1 text-xs font-bold">연락처</span><span class="text-white text-base font-mono" x-text="selectedApp?.contact"></span></div>
+                        <div><span class="block text-zinc-500 mb-1 text-xs font-bold">소속</span><span class="text-white text-base" x-text="selectedApp?.school"></span></div>
+                        <div><span class="block text-zinc-500 mb-1 text-xs font-bold">활동 지역</span><span class="text-white text-base" x-text="selectedApp?.location"></span></div>
+                        <div class="col-span-2 sm:col-span-4 mt-2 pt-4 border-t border-zinc-800">
+                            <span class="block text-zinc-500 mb-1 text-xs font-bold">제출 일시</span>
+                            <span class="text-zinc-400" x-text="formatDate(selectedApp?.submittedAt)"></span>
+                        </div>
+                    </div>
+                    
+                    <!-- 질문과 답변 -->
+                    <div class="space-y-6">
+                        <div class="bg-zinc-950/50 p-6 rounded-2xl border border-zinc-800/50">
+                            <h4 class="text-[#ccff00] font-bold mb-3 text-base">1. 요즘 가장 관심 있는 건 뭐예요?</h4>
+                            <p class="text-zinc-300 whitespace-pre-wrap leading-relaxed" x-text="selectedApp?.q1"></p>
+                        </div>
+                        <div class="bg-zinc-950/50 p-6 rounded-2xl border border-zinc-800/50">
+                            <h4 class="text-[#ccff00] font-bold mb-3 text-base">2. 요즘 “해야지…” 생각만 하고 미루고 있는 게 있나요?</h4>
+                            <p class="text-zinc-300 whitespace-pre-wrap leading-relaxed" x-text="selectedApp?.q2"></p>
+                        </div>
+                        <div class="bg-zinc-950/50 p-6 rounded-2xl border border-zinc-800/50">
+                            <h4 class="text-[#ccff00] font-bold mb-3 text-base">3. 꾸준히 하고 있는 것</h4>
+                            <p class="text-zinc-300 whitespace-pre-wrap leading-relaxed" x-text="selectedApp?.q3"></p>
+                        </div>
+                        <div class="bg-zinc-950/50 p-6 rounded-2xl border border-zinc-800/50">
+                            <h4 class="text-[#ccff00] font-bold mb-3 text-base">4. 본인은 어떤 스타일에 가까운가요?</h4>
+                            <ul class="space-y-2">
+                                <template x-for="item in selectedApp?.q4" :key="item">
+                                    <li class="flex items-center gap-2 text-zinc-300">
+                                        <svg class="w-4 h-4 text-[#ccff00]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                        <span x-text="item"></span>
+                                    </li>
+                                </template>
+                            </ul>
+                        </div>
+                        <div class="bg-zinc-950/50 p-6 rounded-2xl border border-zinc-800/50">
+                            <h4 class="text-[#ccff00] font-bold mb-3 text-base">5. 올해 안에 꼭 한번 해보고 싶은 게 있다면?</h4>
+                            <p class="text-zinc-300 whitespace-pre-wrap leading-relaxed" x-text="selectedApp?.q5"></p>
+                        </div>
+                        <div class="bg-zinc-950/50 p-6 rounded-2xl border border-zinc-800/50">
+                            <h4 class="text-[#ccff00] font-bold mb-3 text-base">6. 누군가 같이 하자고 하면 할 것 같은 건?</h4>
+                            <p class="text-zinc-300 whitespace-pre-wrap leading-relaxed" x-text="selectedApp?.q6"></p>
+                        </div>
+                        <div class="bg-zinc-950/50 p-6 rounded-2xl border border-zinc-800/50">
+                            <h4 class="text-[#ccff00] font-bold mb-3 text-base">7. 모임에서 같이 해보고 싶은 활동</h4>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                <template x-for="item in selectedApp?.q7" :key="item">
+                                    <span class="px-3 py-1.5 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-300" x-text="item"></span>
+                                </template>
+                            </div>
+                        </div>
+                        <div class="bg-zinc-950/50 p-6 rounded-2xl border border-zinc-800/50">
+                            <h4 class="text-[#ccff00] font-bold mb-3 text-base">8. 다른 사람이 열심히 하는 걸 보면 나는 보통?</h4>
+                            <p class="text-zinc-300 font-medium" x-text="selectedApp?.q8"></p>
+                        </div>
+                        <div class="bg-zinc-950/50 p-6 rounded-2xl border border-zinc-800/50">
+                            <h4 class="text-[#ccff00] font-bold mb-3 text-base">9. 이번 달에 딱 하나만 목표를 정한다면?</h4>
+                            <p class="text-zinc-300 whitespace-pre-wrap leading-relaxed" x-text="selectedApp?.q9"></p>
+                        </div>
+                        <div class="bg-zinc-950/50 p-6 rounded-2xl border border-[#ccff00]/30 shadow-[0_0_15px_rgba(204,255,0,0.05)]">
+                            <h4 class="text-[#ccff00] font-bold mb-3 text-base">10. 게으른 완벽주의에 신청한 이유는?</h4>
+                            <p class="text-zinc-100 whitespace-pre-wrap leading-relaxed" x-text="selectedApp?.q10"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Firebase 연동 스크립트 -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        // 사용자 파이어베이스 설정 재사용
+        const firebaseConfig = {
+            apiKey: "AIzaSyAK7t4aZOR_zj6iIp_b5gjZHCLfzX0_hPk",
+            authDomain: "oneday-more.firebaseapp.com",
+            projectId: "oneday-more",
+            storageBucket: "oneday-more.firebasestorage.app",
+            messagingSenderId: "764964591140",
+            appId: "1:764964591140:web:0fd8b49e8bb490c1b8eab1"
+        };
+
+        let app, db;
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            // Alpine.js에서 사용할 수 있도록 window 객체에 할당
+            window.db = db;
+            window.collection = collection;
+            window.getDocs = getDocs;
+            window.query = query;
+            window.orderBy = orderBy;
+        } catch (error) {
+            console.error("Firebase 초기화 에러:", error);
+        }
+    </script>
+
+    <script>
+        function adminApp() {
+            return {
+                password: '',
+                isAuthenticated: false,
+                error: '',
+                applications: [],
+                isLoading: false,
+                isModalOpen: false,
+                selectedApp: null,
+                
+                login() {
+                    if (this.password === '00347') {
+                        this.isAuthenticated = true;
+                        this.error = '';
+                        this.fetchData();
+                    } else {
+                        this.error = '비밀번호가 일치하지 않습니다.';
+                        this.password = '';
+                    }
+                },
+                
+                async fetchData() {
+                    if (!window.db) {
+                        alert("Firebase가 아직 로드되지 않았습니다. 잠시 후 다시 시도해주세요.");
+                        return;
+                    }
+                    
+                    this.isLoading = true;
+                    this.applications = [];
+                    
+                    try {
+                        // 최신순 정렬 시도 (파이어베이스에 인덱스가 필요할 수 있음)
+                        const q = window.query(window.collection(window.db, "applications"), window.orderBy("submittedAt", "desc"));
+                        const querySnapshot = await window.getDocs(q);
+                        const docs = [];
+                        querySnapshot.forEach((doc) => {
+                            docs.push({ id: doc.id, ...doc.data() });
+                        });
+                        this.applications = docs;
+                    } catch (e) {
+                        console.log("정렬 쿼리 실패, 일반 쿼리로 재시도합니다.", e);
+                        // orderBy 실패 시 (Index 부재) 일반 쿼리로 가져와서 클라이언트에서 정렬
+                        try {
+                            const querySnapshot = await window.getDocs(window.collection(window.db, "applications"));
+                            const docs = [];
+                            querySnapshot.forEach((doc) => {
+                                docs.push({ id: doc.id, ...doc.data() });
+                            });
+                            // 최신순 정렬
+                            docs.sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+                            this.applications = docs;
+                        } catch (e2) {
+                            console.error(e2);
+                            alert("데이터를 불러오는 데 실패했습니다. 파이어베이스 규칙(Rules) 설정을 확인해주세요.");
+                        }
+                    }
+                    this.isLoading = false;
+                },
+                
+                formatDate(isoString) {
+                    if (!isoString) return '날짜 정보 없음';
+                    const date = new Date(isoString);
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const hours = String(date.getHours()).padStart(2, '0');
+                    const minutes = String(date.getMinutes()).padStart(2, '0');
+                    return `${year}.${month}.${day} ${hours}:${minutes}`;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
