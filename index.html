@@ -30,13 +30,129 @@
     <div x-data="formApp()" class="w-full max-w-2xl bg-zinc-900/90 backdrop-blur-md rounded-[2rem] shadow-2xl overflow-hidden relative min-h-[700px] flex flex-col border border-zinc-800 z-10">
         
         <!-- Progress Bar -->
-        <div class="h-1.5 w-full bg-zinc-800 absolute top-0 left-0 z-20">
+        <div class="h-1.5 w-full bg-zinc-800 absolute top-0 left-0 z-20" x-show="typeof step === 'number' && step > 0 && step < 6">
             <div class="h-full neon-bg transition-all duration-700 ease-in-out shadow-[0_0_10px_#ccff00]" 
                  :style="`width: ${((step) / (totalSteps)) * 100}%`"></div>
         </div>
 
         <div class="p-8 md:p-10 flex-grow flex flex-col relative mt-2 overflow-y-auto" id="form-container">
             
+            <!-- Step 0: Landing -->
+            <div x-show="step === 0" x-transition:enter="fade-enter-active" x-transition:enter-start="fade-enter" class="flex flex-col items-center justify-center h-full space-y-12 my-auto" style="display: none;">
+                <div class="text-center space-y-6">
+                    <span class="inline-block py-1 px-3 rounded-full border border-[#ccff00] text-[#ccff00] text-xs font-bold tracking-widest shadow-[0_0_10px_rgba(204,255,0,0.3)]">SEASON 2 OPEN</span>
+                    <h1 class="text-5xl md:text-6xl font-extrabold tracking-tighter leading-tight">
+                        게으른 완벽주의,<br>
+                        <span class="neon-text">갓생</span> 시작하기
+                    </h1>
+                    <p class="text-zinc-400 text-lg">혼자서는 미루기만 했던 일들,<br>이제 함께 시작해볼까요?</p>
+                </div>
+
+                <div class="flex flex-col w-full max-w-sm gap-4">
+                    <button @click="step = 1" class="w-full py-5 neon-bg text-black font-extrabold rounded-2xl hover:brightness-110 transition-all shadow-[0_0_20px_rgba(204,255,0,0.4)] text-lg flex items-center justify-center gap-2">
+                        🔥 갓생 2기 지원하기
+                    </button>
+                    <button @click="step = 'feed'" class="w-full py-5 bg-zinc-800/50 backdrop-blur-sm border border-zinc-700 text-white font-bold rounded-2xl hover:bg-zinc-800 hover:border-zinc-500 transition-all text-lg flex items-center justify-center gap-2">
+                        📸 우리의 갓생 구경하기
+                    </button>
+                </div>
+            </div>
+
+            <!-- Feed Screen -->
+            <div x-show="step === 'feed'" x-transition:enter="fade-enter-active" x-transition:enter-start="fade-enter" class="space-y-6 pb-6" style="display: none;">
+                <!-- Header -->
+                <div class="flex items-center justify-between pb-4 border-b border-zinc-800 sticky top-0 bg-zinc-900/90 backdrop-blur-md z-30 pt-2 -mt-4 mb-4">
+                    <button @click="step = 0" class="text-zinc-400 hover:text-white transition-colors p-2 -ml-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    </button>
+                    <h2 class="text-lg font-bold">우리의 갓생</h2>
+                    <div class="w-10"></div> <!-- Placeholder for balance -->
+                </div>
+
+                <!-- Instagram like feed -->
+                <div class="space-y-10">
+                    <!-- Post 1 -->
+                    <div class="bg-zinc-950/50 rounded-2xl border border-zinc-800 overflow-hidden">
+                        <div class="flex items-center gap-3 p-4">
+                            <div class="w-8 h-8 rounded-full neon-bg flex items-center justify-center text-black font-bold text-xs">💪</div>
+                            <span class="font-bold text-sm">god_saeng_member</span>
+                        </div>
+                        <img src="feed1.jpg" class="w-full aspect-square object-cover" alt="갓생 인증">
+                        <div class="p-4 space-y-2">
+                            <div class="flex gap-4 mb-2">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                            </div>
+                            <p class="text-sm"><span class="font-bold mr-2">god_saeng_member</span>퇴근 후 드럼 레슨 완료 🥁🔥 스트레스 팍팍 풀린다!! #갓생 #드럼 #취미생활</p>
+                        </div>
+                    </div>
+
+                    <!-- Post 2 -->
+                    <div class="bg-zinc-950/50 rounded-2xl border border-zinc-800 overflow-hidden">
+                        <div class="flex items-center gap-3 p-4">
+                            <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-xs">📚</div>
+                            <span class="font-bold text-sm">lazy_but_perfect</span>
+                        </div>
+                        <img src="feed2.jpg" class="w-full aspect-[4/5] object-cover" alt="갓생 인증">
+                        <div class="p-4 space-y-2">
+                            <div class="flex gap-4 mb-2">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                            </div>
+                            <p class="text-sm"><span class="font-bold mr-2">lazy_but_perfect</span>주말 오전 도서관 자원봉사 📚 보람찬 하루의 시작 #봉사활동 #주말루틴</p>
+                        </div>
+                    </div>
+
+                    <!-- Post 3 -->
+                    <div class="bg-zinc-950/50 rounded-2xl border border-zinc-800 overflow-hidden">
+                        <div class="flex items-center gap-3 p-4">
+                            <div class="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center text-white font-bold text-xs">🏃</div>
+                            <span class="font-bold text-sm">night_runner</span>
+                        </div>
+                        <img src="feed3.jpg" class="w-full aspect-square object-cover" alt="갓생 인증">
+                        <div class="p-4 space-y-2">
+                            <div class="flex gap-4 mb-2">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                            </div>
+                            <p class="text-sm"><span class="font-bold mr-2">night_runner</span>야간 러닝 5km 달성! 혼자 뛰다가 같이 뛰니까 더 멀리 간다 🏃‍♂️💨 #러닝크루 #야간운동</p>
+                        </div>
+                    </div>
+
+                    <!-- Post 4 -->
+                    <div class="bg-zinc-950/50 rounded-2xl border border-zinc-800 overflow-hidden">
+                        <div class="flex items-center gap-3 p-4">
+                            <div class="w-8 h-8 rounded-full bg-pink-500 flex items-center justify-center text-white font-bold text-xs">🥩</div>
+                            <span class="font-bold text-sm">foodie_life</span>
+                        </div>
+                        <img src="feed4.jpg" class="w-full aspect-[4/5] object-cover" alt="갓생 인증">
+                        <div class="p-4 space-y-2">
+                            <div class="flex gap-4 mb-2">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                            </div>
+                            <p class="text-sm"><span class="font-bold mr-2">foodie_life</span>열심히 살았으니 보상 타임 🍽️ 소고기로 단백질 충전!! #맛집탐방 #갓생보상</p>
+                        </div>
+                    </div>
+
+                    <!-- Post 5 -->
+                    <div class="bg-zinc-950/50 rounded-2xl border border-zinc-800 overflow-hidden">
+                        <div class="flex items-center gap-3 p-4">
+                            <div class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white font-bold text-xs">🌿</div>
+                            <span class="font-bold text-sm">nature_lover</span>
+                        </div>
+                        <img src="feed5.jpg" class="w-full aspect-[4/5] object-cover" alt="갓생 인증">
+                        <div class="p-4 space-y-2">
+                            <div class="flex gap-4 mb-2">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                            </div>
+                            <p class="text-sm"><span class="font-bold mr-2">nature_lover</span>서울식물원에서 힐링 🌿 초록초록한 거 보니까 마음이 편안해진다 #문화생활 #식물원</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Step 1: Intro & Basic Info -->
             <div x-show="step === 1" x-transition:enter="fade-enter-active" x-transition:enter-start="fade-enter" class="space-y-8" style="display: none;">
                 <div>
@@ -213,7 +329,7 @@
         </div>
 
         <!-- Navigation Buttons -->
-        <div class="p-8 pt-4 flex justify-between items-center bg-zinc-900 border-t border-zinc-800 z-10" x-show="step < 6">
+        <div class="p-8 pt-4 flex justify-between items-center bg-zinc-900 border-t border-zinc-800 z-10" x-show="typeof step === 'number' && step > 0 && step < 6">
             <button @click="prevStep" :class="{ 'opacity-0 pointer-events-none': step === 1 }" class="px-2 py-3 text-zinc-500 font-bold hover:text-zinc-300 transition-all flex items-center gap-1">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                 이전
@@ -278,7 +394,7 @@
     <script>
         function formApp() {
             return {
-                step: 1,
+                step: 0,
                 totalSteps: 5, 
                 isSubmitting: false,
                 q4Options: [
