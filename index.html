@@ -48,29 +48,194 @@
                     <p class="text-zinc-400 text-lg">혼자서는 미루기만 했던 일들,<br>이제 함께 시작해볼까요?</p>
                 </div>
 
+                <!-- 24h Real Feed Sneak Peek Preview -->
+                <div class="w-full max-w-md bg-zinc-950/70 border border-zinc-800/90 rounded-2xl p-4 backdrop-blur-sm shadow-xl">
+                    <div class="flex items-center justify-between mb-3 px-1">
+                        <div class="flex items-center gap-2">
+                            <span class="relative flex h-2 w-2">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ccff00] opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-[#ccff00]"></span>
+                            </span>
+                            <span class="text-xs font-bold text-zinc-200">1기 멤버들의 24시간 실시간 인증</span>
+                        </div>
+                        <button @click="openTimeline('all')" class="text-xs text-[#ccff00] hover:underline font-semibold flex items-center gap-0.5">
+                            피드 보기 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-4 gap-2">
+                        <div @click="openTimeline('08:00')" class="group cursor-pointer bg-zinc-900/90 hover:bg-zinc-900 rounded-xl p-2 border border-zinc-800/90 hover:border-[#ccff00]/60 transition-all text-center">
+                            <div class="aspect-[9/14] rounded-lg overflow-hidden mb-1.5 bg-zinc-950 relative border border-zinc-800">
+                                <img src="app_08.jpg" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" alt="08:00 아침 루틴">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                                <span class="absolute bottom-1 left-0 right-0 text-[10px] font-extrabold text-[#ccff00]">08:00</span>
+                            </div>
+                            <span class="text-[11px] font-bold text-zinc-300 group-hover:text-white block">아침</span>
+                        </div>
+                        <div @click="openTimeline('14:00')" class="group cursor-pointer bg-zinc-900/90 hover:bg-zinc-900 rounded-xl p-2 border border-zinc-800/90 hover:border-[#ccff00]/60 transition-all text-center">
+                            <div class="aspect-[9/14] rounded-lg overflow-hidden mb-1.5 bg-zinc-950 relative border border-zinc-800">
+                                <img src="app_14.jpg" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" alt="14:00 오후 루틴">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                                <span class="absolute bottom-1 left-0 right-0 text-[10px] font-extrabold text-[#ccff00]">14:00</span>
+                            </div>
+                            <span class="text-[11px] font-bold text-zinc-300 group-hover:text-white block">오후</span>
+                        </div>
+                        <div @click="openTimeline('19:00')" class="group cursor-pointer bg-zinc-900/90 hover:bg-zinc-900 rounded-xl p-2 border border-zinc-800/90 hover:border-[#ccff00]/60 transition-all text-center">
+                            <div class="aspect-[9/14] rounded-lg overflow-hidden mb-1.5 bg-zinc-950 relative border border-zinc-800">
+                                <img src="app_19.jpg" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" alt="19:00 저녁 루틴">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                                <span class="absolute bottom-1 left-0 right-0 text-[10px] font-extrabold text-[#ccff00]">19:00</span>
+                            </div>
+                            <span class="text-[11px] font-bold text-zinc-300 group-hover:text-white block">저녁</span>
+                        </div>
+                        <div @click="openTimeline('00:00')" class="group cursor-pointer bg-zinc-900/90 hover:bg-zinc-900 rounded-xl p-2 border border-zinc-800/90 hover:border-[#ccff00]/60 transition-all text-center">
+                            <div class="aspect-[9/14] rounded-lg overflow-hidden mb-1.5 bg-zinc-950 relative border border-zinc-800">
+                                <img src="app_00.jpg" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" alt="00:00 자정 루틴">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                                <span class="absolute bottom-1 left-0 right-0 text-[10px] font-extrabold text-[#ccff00]">00:00</span>
+                            </div>
+                            <span class="text-[11px] font-bold text-zinc-300 group-hover:text-white block">자정</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="flex flex-col w-full max-w-sm gap-4">
                     <button @click="step = 1" class="w-full py-5 neon-bg text-black font-extrabold rounded-2xl hover:brightness-110 transition-all shadow-[0_0_20px_rgba(204,255,0,0.4)] text-lg flex items-center justify-center gap-2">
                         🔥 갓생 2기 지원하기
                     </button>
-                    <button @click="step = 'feed'" class="w-full py-5 bg-zinc-800/50 backdrop-blur-sm border border-zinc-700 text-white font-bold rounded-2xl hover:bg-zinc-800 hover:border-zinc-500 transition-all text-lg flex items-center justify-center gap-2">
+                    <button @click="openTimeline('all')" class="w-full py-5 bg-zinc-800/50 backdrop-blur-sm border border-zinc-700 text-white font-bold rounded-2xl hover:bg-zinc-800 hover:border-zinc-500 transition-all text-lg flex items-center justify-center gap-2">
                         📸 우리의 갓생 구경하기
                     </button>
                 </div>
             </div>
 
             <!-- Feed Screen -->
-            <div x-show="step === 'feed'" x-transition:enter="fade-enter-active" x-transition:enter-start="fade-enter" class="space-y-6 pb-6" style="display: none;">
+            <div x-show="step === 'feed'" x-transition:enter="fade-enter-active" x-transition:enter-start="fade-enter" class="space-y-6 pb-6 relative" style="display: none;">
                 <!-- Header -->
                 <div class="flex items-center justify-between pb-4 border-b border-zinc-800 sticky top-0 bg-zinc-900/90 backdrop-blur-md z-30 pt-2 -mt-4 mb-4">
-                    <button @click="step = 0" class="text-zinc-400 hover:text-white transition-colors p-2 -ml-2">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    <button @click="step = 0" class="text-zinc-400 hover:text-white transition-colors p-2 -ml-2 flex items-center gap-1 text-sm font-medium">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        <span>홈으로</span>
                     </button>
-                    <h2 class="text-lg font-bold">우리의 갓생</h2>
-                    <div class="w-10"></div> <!-- Placeholder for balance -->
+                    <div class="flex items-center gap-2">
+                        <h2 class="text-lg font-extrabold text-white">우리의 갓생</h2>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#ccff00]/15 text-[#ccff00] border border-[#ccff00]/30">
+                            1기 LIVE
+                        </span>
+                    </div>
+                    <button @click="step = 1" class="neon-bg text-black text-xs font-extrabold px-3 py-1.5 rounded-xl hover:brightness-110 transition-all shadow-sm">
+                        지원하기
+                    </button>
                 </div>
 
-                <!-- Instagram like feed -->
-                <div class="space-y-10">
+                <!-- Feed View Mode Switcher Tabs -->
+                <div class="flex p-1.5 bg-zinc-950 border border-zinc-800/90 rounded-2xl gap-1 shadow-inner">
+                    <button @click="feedTab = 'timeline'" 
+                            class="flex-1 py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5"
+                            :class="feedTab === 'timeline' ? 'neon-bg text-black shadow-[0_0_15px_rgba(204,255,0,0.3)]' : 'text-zinc-400 hover:text-white'">
+                        <span>📱 24시 실시간 피드</span>
+                        <span class="text-[10px] px-1.5 py-0.5 rounded-full font-extrabold" :class="feedTab === 'timeline' ? 'bg-black text-[#ccff00]' : 'bg-zinc-800 text-zinc-300'">4</span>
+                    </button>
+                    <button @click="feedTab = 'posts'" 
+                            class="flex-1 py-2.5 px-3 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5"
+                            :class="feedTab === 'posts' ? 'neon-bg text-black shadow-[0_0_15px_rgba(204,255,0,0.3)]' : 'text-zinc-400 hover:text-white'">
+                        <span>📸 개별 활동 피드</span>
+                        <span class="text-[10px] px-1.5 py-0.5 rounded-full font-extrabold" :class="feedTab === 'posts' ? 'bg-black text-[#ccff00]' : 'bg-zinc-800 text-zinc-300'">15</span>
+                    </button>
+                </div>
+
+                <!-- Tab 1: 24h Real Timeline Feed -->
+                <div x-show="feedTab === 'timeline'" class="space-y-6">
+                    <!-- Intro banner -->
+                    <div class="bg-gradient-to-r from-zinc-950 via-zinc-900/90 to-zinc-950 p-4 rounded-2xl border border-zinc-800 flex items-start gap-3.5 shadow-lg">
+                        <div class="w-10 h-10 rounded-xl neon-bg/10 border border-[#ccff00]/30 flex items-center justify-center text-lg flex-shrink-0">
+                            ✨
+                        </div>
+                        <div class="space-y-1 text-xs">
+                            <p class="font-extrabold text-zinc-100 text-sm">1기 멤버들이 직접 인증한 24시 타임라인</p>
+                            <p class="text-zinc-400 leading-relaxed break-keep">
+                                매일 4번(08:00, 14:00, 19:00, 00:00) 지정된 시간에 모임원들이 실시간 사진을 공유하며 서로의 성장을 격려하고 있어요.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Time Filter Chips -->
+                    <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+                        <button @click="timeFilter = 'all'" 
+                                class="px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex-shrink-0"
+                                :class="timeFilter === 'all' ? 'neon-bg text-black shadow-md' : 'bg-zinc-950 border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700'">
+                            전체보기
+                        </button>
+                        <template x-for="item in timelineList" :key="item.time">
+                            <button @click="timeFilter = item.time" 
+                                    class="px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex-shrink-0 flex items-center gap-1.5"
+                                    :class="timeFilter === item.time ? 'neon-bg text-black shadow-md' : 'bg-zinc-950 border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700'">
+                                <span x-text="item.icon"></span>
+                                <span x-text="item.time + ' ' + item.label"></span>
+                            </button>
+                        </template>
+                    </div>
+
+                    <!-- Timeline Cards List -->
+                    <div class="space-y-8">
+                        <template x-for="(item, idx) in filteredTimeline" :key="item.time">
+                            <div class="bg-zinc-950/80 rounded-3xl border border-zinc-800/90 p-5 md:p-6 space-y-4 hover:border-zinc-700 transition-all shadow-xl">
+                                <!-- Card Header -->
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2.5">
+                                        <span class="px-3 py-1 rounded-xl font-extrabold text-sm tracking-wider bg-[#ccff00]/15 text-[#ccff00] border border-[#ccff00]/30 flex items-center gap-1.5 shadow-[0_0_10px_rgba(204,255,0,0.15)]">
+                                            <span x-text="item.icon"></span>
+                                            <span x-text="item.time"></span>
+                                        </span>
+                                        <span class="text-xs font-bold uppercase tracking-widest text-zinc-400" x-text="item.period"></span>
+                                    </div>
+                                    <span class="text-[11px] text-zinc-500 font-medium">1기 실시간 캡쳐</span>
+                                </div>
+
+                                <div>
+                                    <h3 class="text-lg font-extrabold text-white" x-text="item.title"></h3>
+                                    <p class="text-xs sm:text-sm text-zinc-300 mt-1.5 leading-relaxed break-keep" x-text="item.desc"></p>
+                                </div>
+
+                                <!-- Tags -->
+                                <div class="flex flex-wrap gap-1.5">
+                                    <template x-for="tag in item.tags" :key="tag">
+                                        <span class="text-[11px] px-2.5 py-1 rounded-lg bg-zinc-900 border border-zinc-800/80 text-zinc-400" x-text="tag"></span>
+                                    </template>
+                                </div>
+
+                                <!-- Mobile Screenshot Container with Click to Zoom -->
+                                <div class="relative group cursor-pointer rounded-2xl overflow-hidden border border-zinc-800/90 bg-zinc-900/60 shadow-2xl transition-all"
+                                     @click="openZoom(timelineList.findIndex(t => t.time === item.time))">
+                                    <div class="relative">
+                                        <img :src="item.image" :alt="item.title" class="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.015]">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-5">
+                                            <span class="bg-black/80 backdrop-blur-md text-white text-xs font-bold px-4 py-2 rounded-full border border-white/20 flex items-center gap-1.5 shadow-xl">
+                                                🔍 클릭하여 원본 크게 보기
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <!-- Mobile top indicator badge -->
+                                    <div class="absolute top-3 right-3 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10 text-[11px] text-zinc-300 flex items-center gap-1 pointer-events-none shadow-md">
+                                        <span>📱</span> <span x-text="item.time + ' 인증 피드'"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- Bottom CTA in Timeline Tab -->
+                    <div class="bg-gradient-to-br from-zinc-950 via-zinc-900 to-black p-6 rounded-3xl border border-zinc-800 text-center space-y-3.5 mt-8 shadow-2xl">
+                        <span class="text-3xl block">🔥</span>
+                        <h4 class="text-lg font-extrabold text-white">나도 2기 멤버들과 함께 갓생 시작하기!</h4>
+                        <p class="text-xs sm:text-sm text-zinc-400 break-keep">매일 4번의 인증으로 혼자선 미루기만 했던 루틴을 깨워보세요.</p>
+                        <button @click="step = 1" class="w-full py-4 neon-bg text-black font-extrabold rounded-xl hover:brightness-110 transition-all shadow-[0_0_20px_rgba(204,255,0,0.3)] text-base flex items-center justify-center gap-2">
+                            <span>🔥 갓생 2기 지원서 작성하기</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Individual Activity Feed (15 Posts) -->
+                <div x-show="feedTab === 'posts'" class="space-y-10">
                     <!-- Post 1 -->
                     <div class="bg-zinc-950/50 rounded-2xl border border-zinc-800 overflow-hidden">
                         <div class="flex items-center gap-3 p-4">
@@ -308,15 +473,83 @@
                             <p class="text-sm"><span class="font-bold mr-2">goal_scorer</span>아침 풋살. 맑은 날씨에 인조잔디 밟는 기분 최고! 폐 터질 것 같은데 멈출 수가 없다 ㅋㅋㅋ 이번 주말도 오운완 완료. #풋살 #주말운동 #축구</p>
                         </div>
                     </div>
+
+                    <!-- Bottom CTA in Posts Tab -->
+                    <div class="bg-gradient-to-br from-zinc-950 via-zinc-900 to-black p-6 rounded-3xl border border-zinc-800 text-center space-y-3.5 mt-8 shadow-2xl">
+                        <span class="text-3xl block">🔥</span>
+                        <h4 class="text-lg font-extrabold text-white">나도 함께 활동하고 싶다면?</h4>
+                        <p class="text-xs sm:text-sm text-zinc-400 break-keep">게으른 완벽주의자들을 위한 갓생 2기에서 함께해요!</p>
+                        <button @click="step = 1" class="w-full py-4 neon-bg text-black font-extrabold rounded-xl hover:brightness-110 transition-all shadow-[0_0_20px_rgba(204,255,0,0.3)] text-base">
+                            🔥 갓생 2기 지원서 작성하기
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Lightbox Zoom Modal -->
+                <div x-show="zoomModalOpen" 
+                     x-transition:enter="transition ease-out duration-200"
+                     x-transition:enter-start="opacity-0 scale-95"
+                     x-transition:enter-end="opacity-100 scale-100"
+                     x-transition:leave="transition ease-in duration-150"
+                     x-transition:leave-start="opacity-100 scale-100"
+                     x-transition:leave-end="opacity-0 scale-95"
+                     class="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl p-4 sm:p-6 flex flex-col justify-between overflow-hidden"
+                     style="display: none;"
+                     @keydown.escape.window="closeZoom()">
+                    
+                    <!-- Modal Top Header -->
+                    <div class="flex items-center justify-between pb-3 border-b border-zinc-800 max-w-xl w-full mx-auto">
+                        <div class="flex items-center gap-2">
+                            <span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#ccff00]/15 text-[#ccff00] border border-[#ccff00]/30"
+                                  x-text="currentZoomItem ? currentZoomItem.time : ''"></span>
+                            <span class="font-bold text-sm text-white truncate" x-text="currentZoomItem ? currentZoomItem.title : ''"></span>
+                        </div>
+                        <button @click="closeZoom()" class="p-2 text-zinc-400 hover:text-white rounded-full bg-zinc-900 border border-zinc-800 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    </div>
+
+                    <!-- Modal Image with Prev/Next Controls -->
+                    <div class="flex-grow flex items-center justify-center relative my-2 overflow-hidden max-w-xl w-full mx-auto">
+                        <button @click="prevZoom()" class="absolute left-1 sm:left-2 z-20 p-2.5 rounded-full bg-black/70 backdrop-blur-md border border-zinc-700 text-white hover:bg-black transition-all shadow-xl">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        </button>
+
+                        <div class="max-h-[68vh] overflow-y-auto rounded-2xl border border-zinc-800 shadow-2xl bg-zinc-950 flex items-center justify-center p-1">
+                            <img :src="currentZoomItem ? currentZoomItem.image : ''" class="max-h-[66vh] w-auto object-contain mx-auto rounded-xl" alt="갓생 인증 원본">
+                        </div>
+
+                        <button @click="nextZoom()" class="absolute right-1 sm:right-2 z-20 p-2.5 rounded-full bg-black/70 backdrop-blur-md border border-zinc-700 text-white hover:bg-black transition-all shadow-xl">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </button>
+                    </div>
+
+                    <!-- Modal Bottom Info -->
+                    <div class="pt-3 border-t border-zinc-800 text-center space-y-1.5 max-w-xl w-full mx-auto">
+                        <p class="text-xs text-zinc-300 break-keep leading-relaxed px-4" x-text="currentZoomItem ? currentZoomItem.desc : ''"></p>
+                        <div class="flex justify-center gap-2 pt-1 items-center">
+                            <template x-for="(t, i) in timelineList" :key="t.time">
+                                <button @click="zoomIndex = i" 
+                                        class="h-2 rounded-full transition-all"
+                                        :class="zoomIndex === i ? 'bg-[#ccff00] w-6' : 'bg-zinc-700 w-2'"></button>
+                            </template>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Step 1: Intro & Basic Info -->
             <div x-show="step === 1" x-transition:enter="fade-enter-active" x-transition:enter-start="fade-enter" class="space-y-8" style="display: none;">
                 <div>
-                    <div class="w-full h-40 rounded-2xl mb-8 overflow-hidden border border-zinc-700 relative">
+                    <div class="w-full h-40 rounded-2xl mb-6 overflow-hidden border border-zinc-700 relative">
                         <img src="poster.jpg" alt="갓생 2기" class="w-full h-full object-cover opacity-80 mix-blend-screen">
                         <div class="absolute inset-0 bg-gradient-to-t from-zinc-900 to-transparent"></div>
+                    </div>
+
+                    <!-- 24h Routine Highlight Banner in Step 1 -->
+                    <div class="mb-4 flex items-center gap-2 text-xs text-zinc-300 bg-zinc-950/80 px-3.5 py-2.5 rounded-xl border border-zinc-800">
+                        <span class="text-base">⏰</span>
+                        <span>1기 멤버들은 <strong>08:00 / 14:00 / 19:00 / 00:00</strong> 하루 4번 인증하며 함께 성장하고 있어요!</span>
                     </div>
                     
                     <span class="text-zinc-400 font-bold tracking-widest text-xs uppercase mb-2 block">🦥 게으른 완벽주의</span>
@@ -574,6 +807,81 @@
                     '③ 나도 슬슬 해야겠다는 생각이 든다',
                     '④ 바로 뭐라도 시작하는 편이다'
                 ],
+                feedTab: 'timeline',
+                timeFilter: 'all',
+                zoomModalOpen: false,
+                zoomIndex: 0,
+                timelineList: [
+                    {
+                        time: '08:00',
+                        label: '아침',
+                        period: 'MORNING ROUTINE',
+                        icon: '🌅',
+                        title: '미라클 모닝 & 활기찬 아침 시작',
+                        image: 'app_08.jpg',
+                        tags: ['#8시기상인증', '#아침러닝', '#공복웨이트', '#토익LC_RC', '#건강식단', '#모닝스터디'],
+                        desc: '일찍 일어난 새가 갓생을 산다! 알람 울리자마자 8시 시계 인증샷으로 시작해, 아침 러닝과 헬스, 든든한 닭가슴살 샐러드 식단, 그리고 토익 문제집을 풀며 하루의 첫 단추를 힘차게 꿰맵니다.'
+                    },
+                    {
+                        time: '14:00',
+                        label: '오후',
+                        period: 'AFTERNOON FOCUS',
+                        icon: '☀️',
+                        title: '나태함 극복! 오후 집중 스터디 & 운동',
+                        image: 'app_14.jpg',
+                        tags: ['#카페카공', '#대학강의', '#실내배드민턴', '#클린식단', '#잔디풋살', '#집중모드'],
+                        desc: '나른해지기 쉬운 마의 오후 2시! 카페에 모여 아이스 아메리카노와 함께 카공을 하거나, 대학 강의실 열공, 배드민턴과 풋살 잔디를 뛰며 땀 흘려 나태함을 리프레시합니다.'
+                    },
+                    {
+                        time: '19:00',
+                        label: '저녁',
+                        period: 'EVENING ROUTINE',
+                        icon: '🌙',
+                        title: '퇴근·하교 후 나를 채우는 저녁 루틴',
+                        image: 'app_19.jpg',
+                        tags: ['#퇴근후산책', '#인강복습', '#헬스장덤벨', '#저녁식단', '#침대힐링', '#노트북필기'],
+                        desc: '하루 본업이 끝나고 시작되는 진짜 나만의 2차 하루! 헬스장 덤벨로 하루의 스트레스를 날리고, 온라인 인강 복습과 필기, 가벼운 저녁 산책과 건강한 식단으로 알차게 채워갑니다.'
+                    },
+                    {
+                        time: '00:00',
+                        label: '자정',
+                        period: 'MIDNIGHT WRAP-UP',
+                        icon: '🌌',
+                        title: '하루를 멋지게 마침표 찍는 자정',
+                        image: 'app_00.jpg',
+                        tags: ['#자정독서', '#개발코딩', '#취미마이크', '#영단어암기', '#하루마무리', '#뿌듯한기록'],
+                        desc: '모두가 잠든 고요한 자정, 스탠드 조명 아래에서. 오늘 못 읽은 책 한 챕터 독서, VS Code 개발 코딩, 취미 방송과 토익 영단어 암기로 하루의 마지막까지 뿌듯하게 마침표를 찍습니다.'
+                    }
+                ],
+                get filteredTimeline() {
+                    if (this.timeFilter === 'all') return this.timelineList;
+                    return this.timelineList.filter(t => t.time === this.timeFilter);
+                },
+                get currentZoomItem() {
+                    return this.timelineList[this.zoomIndex] || null;
+                },
+                openTimeline(time) {
+                    this.step = 'feed';
+                    this.feedTab = 'timeline';
+                    this.timeFilter = time || 'all';
+                    this.$nextTick(() => {
+                        const container = document.getElementById('form-container');
+                        if (container) container.scrollTo({ top: 0, behavior: 'smooth' });
+                    });
+                },
+                openZoom(idx) {
+                    this.zoomIndex = idx;
+                    this.zoomModalOpen = true;
+                },
+                closeZoom() {
+                    this.zoomModalOpen = false;
+                },
+                nextZoom() {
+                    this.zoomIndex = (this.zoomIndex + 1) % this.timelineList.length;
+                },
+                prevZoom() {
+                    this.zoomIndex = (this.zoomIndex - 1 + this.timelineList.length) % this.timelineList.length;
+                },
                 formData: {
                     name: '', age: '', school: '', location: '', contact: '',
                     q1: '', q2: '', q3: '',
